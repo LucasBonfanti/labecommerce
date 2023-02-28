@@ -1,0 +1,25 @@
+{
+  "name": "labecommerce-backend",
+  "version": "1.0.0",
+  "description": "exercicio package-json",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasBonfanti/node-package-json-exercicios.git"
+  },
+  "keywords": [
+    "package-json",
+    "node.js"
+  ],
+  "author": "Lucas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucasBonfanti/node-package-json-exercicios/issues"
+  },
+  "homepage": "https://github.com/LucasBonfanti/node-package-json-exercicios#readme"
+}
