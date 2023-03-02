@@ -18,7 +18,7 @@ export const product: Array<TProduct> = [
         id: "produtoA",
         name: "Relogio",
         price: 30,
-        category: "utilidades"
+        category: "acessorios"
     },
     {
         id: "produtoB",
