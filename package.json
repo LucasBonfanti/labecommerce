@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "exercicio package-json",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./index.js"
+    "start": "tsc && node ./build/index.js"
+
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,13 @@
   "author": "Lucas",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LucasBonfanti/node-package-json-exercicios/issues"
+    "url": "https://github.com/LucasBonfanti/labecommerce"
   },
-  "homepage": "https://github.com/LucasBonfanti/node-package-json-exercicios#readme"
+  "homepage": "https://github.com/LucasBonfanti/labecommerce",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@types/node": "^18.14.2"
+  }
 }
