@@ -1,13 +1,18 @@
 import { user, product, purchase, createUser, getAllUser, createProduct, getAllProduct, getProductById, queryProductsByName, createPurchase, getAllPurchasesFromUserId } from "./database"
+import express, { Request, Response } from "express";
+import cors from 'cors';
 
-// console.log(user)
-// console.log(product)
-// console.log(purchase)
-// createUser( "clienteC", "juca@email.com", "senha360" )
-// getAllUser()
-// createProduct("p03", "Garrafa", 25, CATEGORY.KITCHEN)
-//getAllProduct()
-//getProductById("p01")
-// queryProductsByName("Panela")
-// createPurchase("ClienteA","p02", 1, 70)
-getAllPurchasesFromUserId("clienteA")
+
+const app = express();
+
+app.use(express.json());
+
+app.use(cors());
+
+app.listen(3003, () => {
+    console.log("Servidor rodando na porta 3003");
+});
+
+app.get("/ping", (req: Request, res: Response) => {
+    res.send("Pong!")
+});

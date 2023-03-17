@@ -4,9 +4,8 @@
   "description": "exercicio package-json",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node ./build/index.js"
-
+    "start": "tsc && node build/index.js",
+    "dev": "ts-node-dev src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -23,9 +22,14 @@
   },
   "homepage": "https://github.com/LucasBonfanti/labecommerce",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@types/node": "^18.14.2"
+    "@types/node": "^18.14.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
   }
 }
