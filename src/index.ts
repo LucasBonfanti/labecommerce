@@ -16,3 +16,24 @@ app.listen(3003, () => {
 app.get("/ping", (req: Request, res: Response) => {
     res.send("Pong!")
 });
+
+app.get("/users", (req: Request, res: Response) => {
+    res.status(200).send(user)
+});
+
+app.get("/products", (req: Request, res: Response) => {
+    res.status(200).send(product)
+});
+
+app.get("/product/search", (req: Request, res: Response) => {
+    const q = req.query.q as string
+    
+    const result = q 
+    ?
+     product.filter(item => item.name.toLowerCase().includes(q.toLowerCase()))
+    :
+    product
+
+    res.status(200).send(result)
+});
+
