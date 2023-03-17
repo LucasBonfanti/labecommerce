@@ -1,4 +1,5 @@
-import { TProduct, TPurchase, TUser } from "./types";
+import { TProduct, TPurchase, TUser,} from "./types";
+
 
 enum CATEGORY {
     ACCESSORIES = "Acessórios",
@@ -8,12 +9,12 @@ enum CATEGORY {
 
 export const user: Array<TUser> = [
     {
-        id: "clienteA",
+        id: "u001",
         email: "lucas@email.com",
         password: "password123"
     },
     {
-        id: "clienteB",
+        id: "u002",
         email: "joao@email.com",
         password: "password321"
     }
@@ -21,13 +22,13 @@ export const user: Array<TUser> = [
 
 export const product: Array<TProduct> = [
     {
-        id: "p01",
+        id: "p001",
         name: "Relogio",
         price: 30,
         category: CATEGORY.ACCESSORIES
     },
     {
-        id: "p02",
+        id: "p002",
         name: "Panela",
         price: 70,
         category: CATEGORY.KITCHEN
@@ -36,14 +37,14 @@ export const product: Array<TProduct> = [
 
 export const purchase: Array<TPurchase> = [
     {
-        userId: "clienteA",
-        productId: "p01",
+        userId: "u001",
+        productId: "p001",
         quantity: 2,
         totalPrice: 60
     },
     {
-        userId: "clienteB",
-        productId: "p02",
+        userId: "u002",
+        productId: "p002",
         quantity: 3,
         totalPrice: 210
     }

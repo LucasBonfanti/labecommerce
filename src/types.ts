@@ -1,4 +1,4 @@
-enum CATEGORY {
+export enum CATEGORY {
     ACCESSORIES = "Acessórios",
     KITCHEN = "Cozinha",
     ELECTRONICS = "Eletrônicos"
