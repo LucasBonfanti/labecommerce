@@ -1,4 +1,4 @@
-import { user, product } from "./database"
+import { user, product, purchase } from "./database"
 import express, { Request, Response } from "express";
 import cors from 'cors';
 import { TProduct, TPurchase, TUser } from "./types";
@@ -38,6 +38,24 @@ app.get("/product/search", (req: Request, res: Response) => {
 
     res.status(200).send(result)
 });
+
+app.get("/product/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const result:TProduct = product.find((item) => item.id === id)
+
+    res.status(200).send(result)
+
+})
+
+app.get("/users/:id/purchases", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const result:TPurchase = purchase.find((item) => item.userId === id)
+
+    res.status(200).send(result)
+
+})
 
 
 app.post("/users", (req: Request, res: Response) => {
