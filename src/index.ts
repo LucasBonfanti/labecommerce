@@ -91,6 +91,42 @@ app.post("/purchases", (req: Request, res: Response) => {
 });
 
 
+app.put("/users/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+    const newEmail:string = req.body.email
+    const newPassword:string = req.body.password
+
+    const userById:TUser = user.find((item) => item.id === id)
+
+    if(userById){
+        userById.email = newEmail || userById.email
+        userById.password = newPassword || userById.password
+    }
+
+    res.status(200).send("Cadastro atualizado com sucesso")
+} )
+
+
+app.put("/products/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+    const newName:string = req.body.name
+    const newPrice:number = req.body.price
+    const newCategory: CATEGORY = req.body.category
+
+    const productById:TProduct = product.find((item) => item.id === id)
+
+    if(productById){
+        productById.name = newName || productById.name
+        productById.price = newPrice | productById.price
+        productById.category = newCategory || productById.category
+    }
+
+    res.status(200).send("Produto atualizado com sucesso")
+} )
+
+
+
+
 app.delete("/users/:id", (req: Request, res: Response) => {
     const id: string = req.params.id
 
