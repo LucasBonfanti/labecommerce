@@ -91,4 +91,42 @@ app.post("/purchases", (req: Request, res: Response) => {
 });
 
 
+app.delete("/users/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const index: number = user.findIndex((item) => item.id === id)
+
+    let message: string
+
+    if(index >= 0){
+        user.splice(index, 1)
+        message = "Usuário apagado com sucesso"
+    }else{
+        message = "Nenhum usuário encontrado"
+    }
+
+    res.status(200).send(message)
+})
+
+app.delete("/products/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const index: number = product.findIndex((item) => item.id === id)
+
+    let message: string
+
+    if(index >= 0){
+        product.splice(index, 1)
+        message = "Produto deletado com sucesso"
+    }else{
+        message = "Nenhum produto encontrado"
+    }
+
+    res.status(200).send(message)
+})
+
+
+
+
+
 
