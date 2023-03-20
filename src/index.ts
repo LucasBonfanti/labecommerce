@@ -1,4 +1,4 @@
-import { user, product } from "./database"
+import { user, product, purchase } from "./database"
 import express, { Request, Response } from "express";
 import cors from 'cors';
 import { TProduct, TPurchase, TUser } from "./types";
@@ -39,6 +39,24 @@ app.get("/product/search", (req: Request, res: Response) => {
     res.status(200).send(result)
 });
 
+app.get("/product/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const result:TProduct = product.find((item) => item.id === id)
+
+    res.status(200).send(result)
+
+})
+
+app.get("/users/:id/purchases", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const result:TPurchase = purchase.find((item) => item.userId === id)
+
+    res.status(200).send(result)
+
+})
+
 
 app.post("/users", (req: Request, res: Response) => {
     const id: string = req.body.id
@@ -71,6 +89,80 @@ app.post("/purchases", (req: Request, res: Response) => {
 
     res.status(201).send("Nova compra realizada!")
 });
+
+
+app.put("/users/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+    const newEmail:string = req.body.email
+    const newPassword:string = req.body.password
+
+    const userById:TUser = user.find((item) => item.id === id)
+
+    if(userById){
+        userById.email = newEmail || userById.email
+        userById.password = newPassword || userById.password
+    }
+
+    res.status(200).send("Cadastro atualizado com sucesso")
+} )
+
+
+app.put("/products/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+    const newName:string = req.body.name
+    const newPrice:number = req.body.price
+    const newCategory: CATEGORY = req.body.category
+
+    const productById:TProduct = product.find((item) => item.id === id)
+
+    if(productById){
+        productById.name = newName || productById.name
+        productById.price = newPrice | productById.price
+        productById.category = newCategory || productById.category
+    }
+
+    res.status(200).send("Produto atualizado com sucesso")
+} )
+
+
+
+
+app.delete("/users/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const index: number = user.findIndex((item) => item.id === id)
+
+    let message: string
+
+    if(index >= 0){
+        user.splice(index, 1)
+        message = "Usuário apagado com sucesso"
+    }else{
+        message = "Nenhum usuário encontrado"
+    }
+
+    res.status(200).send(message)
+})
+
+app.delete("/products/:id", (req: Request, res: Response) => {
+    const id: string = req.params.id
+
+    const index: number = product.findIndex((item) => item.id === id)
+
+    let message: string
+
+    if(index >= 0){
+        product.splice(index, 1)
+        message = "Produto deletado com sucesso"
+    }else{
+        message = "Nenhum produto encontrado"
+    }
+
+    res.status(200).send(message)
+})
+
+
+
 
 
 
