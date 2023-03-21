@@ -46,6 +46,7 @@ app.get("/products", (req: Request, res: Response) => {
     }
 });
 
+//GET PRODUCTS BY QUERY (NAME)
 app.get("/product/search", (req: Request, res: Response) => {
    try {
     const q = req.query.q as string
@@ -69,25 +70,52 @@ app.get("/product/search", (req: Request, res: Response) => {
    }
 });
 
+//GET PRODUCTS BY ID
 app.get("/product/:id", (req: Request, res: Response) => {
-    const id: string = req.params.id
+    try {
+        const id: string = req.params.id
 
-    const result:TProduct = product.find((item) => item.id === id)
+        const result:TProduct = product.find((item) => item.id === id)
 
-    res.status(200).send(result)
+        if(!result){
+            res.status(400)
+            throw new Error("O produto não existe.")
+        }
+        res.status(200).send(result)
+
+    } catch (error) {
+        console.log(error)
+        res.send(error.message)
+        
+    }
 
 })
 
+//GET PURCHASES BY USER 
 app.get("/users/:id/purchases", (req: Request, res: Response) => {
-    const id: string = req.params.id
+    try {
+        const id: string = req.params.id
 
-    const result:TPurchase = purchase.find((item) => item.userId === id)
+        const result:TPurchase = purchase.find((item) => item.userId === id)
 
-    res.status(200).send(result)
+        if(!result){
+            res.status(400)
+            throw new Error("Esse usuário não existe.")
+        }
+
+        res.status(200).send(result)
+
+    } catch (error) {
+        console.log(error)
+        res.send(error.message)
+        
+    }
 
 })
 
 
+
+//CREATE A NEW USER
 app.post("/users", (req: Request, res: Response) => {
    try {
     const id: string = req.body.id
@@ -135,6 +163,7 @@ app.post("/users", (req: Request, res: Response) => {
    }
 });
 
+//CREATE A NEW PRODUCT
 app.post("/products", (req: Request, res: Response) => {
    try {
     const id: string = req.body.id
@@ -173,6 +202,7 @@ app.post("/products", (req: Request, res: Response) => {
    }
 });
 
+//CREATE A NEW PURCHASES
 app.post("/purchases", (req: Request, res: Response) => {
   try {
 
@@ -226,30 +256,64 @@ app.post("/purchases", (req: Request, res: Response) => {
 });
 
 
+
+
+//EDIT USER BY ID
 app.put("/users/:id", (req: Request, res: Response) => {
-    const id: string = req.params.id
-    const newEmail:string = req.body.email
-    const newPassword:string = req.body.password
 
-    const userById:TUser = user.find((item) => item.id === id)
+    try {
 
-    if(userById){
+      const id: string = req.params.id
+
+      const newEmail:string = req.body.email
+      const newPassword:string = req.body.password
+      
+
+      const userById:TUser = user.find((item) => item.id === id)
+
+      if(id[0] !== "u"){
+        res.status(400)
+        throw new Error("O 'id' deve começar com a letra 'u'.")
+      }if(!userById){
+        res.status(400)
+        throw new Error("Este usuário não existe.")}
+
+      if(userById){
         userById.email = newEmail || userById.email
         userById.password = newPassword || userById.password
-    }
+      }
 
-    res.status(200).send("Cadastro atualizado com sucesso")
+       res.status(200).send("Cadastro atualizado com sucesso")
+
+    } catch (error) {
+        console.log(error)
+        res.send(error.message)
+        
+    }
 } )
 
-
+//EDIT PRODUCT
 app.put("/products/:id", (req: Request, res: Response) => {
+
+   try {
     const id: string = req.params.id
+
+    if(id[0] !== "p"){
+        res.status(400)
+        throw new Error("O 'id' precisa começar com 'p'.")
+    }
+
     const newName:string = req.body.name
     const newPrice:number = req.body.price
     const newCategory: CATEGORY = req.body.category
 
+    
     const productById:TProduct = product.find((item) => item.id === id)
 
+    if(!productById){
+        res.status(400)
+        throw new Error("Este produto não existe.")
+    }
     if(productById){
         productById.name = newName || productById.name
         productById.price = newPrice | productById.price
@@ -257,44 +321,67 @@ app.put("/products/:id", (req: Request, res: Response) => {
     }
 
     res.status(200).send("Produto atualizado com sucesso")
+   } catch (error) {
+    console.log(error)
+    res.send(error.message)
+    
+   }
 } )
 
 
 
-
+//DELETE USER BY ID
 app.delete("/users/:id", (req: Request, res: Response) => {
+
+try {
     const id: string = req.params.id
 
     const index: number = user.findIndex((item) => item.id === id)
-
     let message: string
 
-    if(index >= 0){
+    if(id[0] !== "u"){
+        res.status(400)
+        throw new Error("O 'id' do usuário deve começar com a letra 'u'")
+    } if(index < 0){
+        res.status(400)
+        throw new Error("Este usuário não existe")
+    }if(index >= 0){
         user.splice(index, 1)
-        message = "Usuário apagado com sucesso"
-    }else{
-        message = "Nenhum usuário encontrado"
+        res.status(200).send("Usuário apagado com sucesso")
     }
 
-    res.status(200).send(message)
+} catch (error) {
+    console.log(error)
+    res.send(error.message)
+    
+}
 })
 
+//DELETE PRODUCT BY ID
 app.delete("/products/:id", (req: Request, res: Response) => {
-    const id: string = req.params.id
-
-    const index: number = product.findIndex((item) => item.id === id)
-
-    let message: string
-
-    if(index >= 0){
-        product.splice(index, 1)
-        message = "Produto deletado com sucesso"
-    }else{
-        message = "Nenhum produto encontrado"
+    try {
+        const id: string = req.params.id
+    
+        const index: number = product.findIndex((item) => item.id === id)
+        let message: string
+    
+        if(id[0] !== "p"){
+            res.status(400)
+            throw new Error("O 'id' do produto deve começar com a letra 'p'.")
+        } if(index < 0){
+            res.status(400)
+            throw new Error("Este produto não existe.")
+        }if(index >= 0){
+            user.splice(index, 1)
+            res.status(200).send("Produto apagado com sucesso.")
+        }
+    
+    } catch (error) {
+        console.log(error)
+        res.send(error.message)
+        
     }
-
-    res.status(200).send(message)
-})
+    })
 
 
 
