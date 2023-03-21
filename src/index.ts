@@ -372,7 +372,7 @@ app.delete("/products/:id", (req: Request, res: Response) => {
             res.status(400)
             throw new Error("Este produto não existe.")
         }if(index >= 0){
-            user.splice(index, 1)
+            product.splice(index, 1)
             res.status(200).send("Produto apagado com sucesso.")
         }
     
