@@ -83,6 +83,14 @@ DROP TABLE purchases;
 
 SELECT * FROM purchases;
 
+SELECT * FROM purchases
+INNER JOIN users
+ON purchases.buyer_id = users.id
+WHERE buyer_id = "u003";
+
+
+
+
 
 
 
