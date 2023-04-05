@@ -63,6 +63,15 @@ SELECT * FROM products
 WHERE price >= 100.00 AND price <= 300.00
 ORDER BY price ASC;
 
+CREATE TABLE purchases (
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    total_price REAL NOT NULL,
+    paid INTEGER NOT NULL,
+    delivered_at TEXT,
+    buyer_id TEXT NOT NULL,
+    FOREIGN KEY(buyer_id) REFERENCES users(id)
+);
+
 
 
 
