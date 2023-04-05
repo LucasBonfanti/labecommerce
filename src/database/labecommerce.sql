@@ -63,6 +63,35 @@ SELECT * FROM products
 WHERE price >= 100.00 AND price <= 300.00
 ORDER BY price ASC;
 
+CREATE TABLE purchases (
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    total_price REAL NOT NULL,
+    paid INTEGER NOT NULL,
+    delivered_at TEXT,
+    buyer_id TEXT NOT NULL,
+    FOREIGN KEY(buyer_id) REFERENCES users(id)
+);
+
+INSERT INTO purchases
+VALUES
+("001", 45.00, 0, DATETIME('now'), "u001"),
+("002", 57.00, 0, DATETIME('now') , "u003"),
+("003", 68.00, 0, DATETIME('now') , "u003"),
+("004", 99.00, 0, DATETIME('now'), "u002");
+
+DROP TABLE purchases;
+
+SELECT * FROM purchases;
+
+SELECT * FROM purchases
+INNER JOIN users
+ON purchases.buyer_id = users.id
+WHERE buyer_id = "u003";
+
+
+
+
+
 
 
 
