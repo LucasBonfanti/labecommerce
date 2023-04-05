@@ -88,6 +88,24 @@ INNER JOIN users
 ON purchases.buyer_id = users.id
 WHERE buyer_id = "u003";
 
+CREATE TABLE purchases_products (
+    purchase_id TEXT NOT NULL,
+    product_id TEXT NOT NULL,
+    quantity INTEGER NOT NULL
+);
+
+INSERT INTO purchases_products
+VALUES
+("b001", "p001", 2),
+("b001", "p002", 1),
+("b002", "p004", 1),
+("b003", "p003", 1);
+
+SELECT * FROM purchases_products
+
+
+
+
 
 
 
