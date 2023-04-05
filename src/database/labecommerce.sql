@@ -72,6 +72,18 @@ CREATE TABLE purchases (
     FOREIGN KEY(buyer_id) REFERENCES users(id)
 );
 
+INSERT INTO purchases
+VALUES
+("001", 45.00, 0, DATETIME('now'), "u001"),
+("002", 57.00, 0, DATETIME('now') , "u003"),
+("003", 68.00, 0, DATETIME('now') , "u003"),
+("004", 99.00, 0, DATETIME('now'), "u002");
+
+DROP TABLE purchases;
+
+SELECT * FROM purchases;
+
+
 
 
 
