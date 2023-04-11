@@ -3,28 +3,22 @@ import express, { Request, Response } from "express";
 import cors from 'cors';
 import { TProduct, TPurchase, TUser } from "./types";
 import {CATEGORY} from "./types"
+import { db } from "./database/knex";
 
 
 const app = express();
-
 app.use(express.json());
-
 app.use(cors());
-
 app.listen(3003, () => {
     console.log("Servidor rodando na porta 3003");
 });
 
-app.get("/ping", (req: Request, res: Response) => {
-    res.send("Pong!")
-});
-
 
 // GET ALL USERS
-app.get("/users", (req: Request, res: Response) => {
+app.get("/users", async (req: Request, res: Response) => {
     try {
-        res.status(200).send(user)
-
+        const result = await db.raw(`SELECT * FROM users;`)
+        res.status(200).send({result})
     } catch (error) {
         console.log(error)
         if(res.statusCode === 200){
@@ -34,9 +28,10 @@ app.get("/users", (req: Request, res: Response) => {
 });
 
 //GET ALL PRODUCTS
-app.get("/products", (req: Request, res: Response) => {
+app.get("/products", async (req: Request, res: Response) => {
     try {
-        res.status(200).send(product)
+        const result = await db.raw(`SELECT * FROM products;`)
+        res.status(200).send({result})
 
     } catch (error) {
         console.log(error)
@@ -47,26 +42,32 @@ app.get("/products", (req: Request, res: Response) => {
 });
 
 //GET PRODUCTS BY QUERY (NAME)
-app.get("/product/search", (req: Request, res: Response) => {
+app.get("/product/search", async (req: Request, res: Response) => {
    try {
     const q = req.query.q as string
-
     if(q.length < 1){
         res.status(400)
         throw new Error("O nome do produto tem que ter ao menos um caractere.")
     }
 
-    const result = q 
-    ?
-     product.filter(item => item.name.toLowerCase().includes(q.toLowerCase()))
-    :
-    product
+    const productExists: {}[] = await db.raw(`SELECT * FROM products WHERE name = '${q}'`)
+    
+    if(productExists.length <= 0){
+        throw new Error("Esse produto não existe.")
+    }
 
-    res.status(200).send(result)
+    res.status(200).send({productExists})
+
+    // const result = q 
+    // ?
+    // product.filter(item => item.name.toLowerCase().includes(q.toLowerCase()))
+    // :
+    // product
+
+    // res.status(200).send(result)
    } catch (error) {
     console.log(error)
     res.send(error.message)
-    
    }
 });
 
