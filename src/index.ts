@@ -117,11 +117,15 @@ app.get("/users/:id/purchases", (req: Request, res: Response) => {
 
 
 //CREATE A NEW USER
-app.post("/users", (req: Request, res: Response) => {
+app.post("/users", async (req: Request, res: Response) => {
    try {
     const id: string = req.body.id
     const email: string = req.body.email
     const password: string = req.body.password
+
+    if(!id || !email || !password){
+        throw new Error("Para criar um usuário é necessário um id, email e senha.")
+    }
 
     if(typeof id !== "string"){
         res.status(400)
@@ -133,44 +137,31 @@ app.post("/users", (req: Request, res: Response) => {
     }if(typeof password !== "string"){
         res.status(400)
         throw new Error("'password' deve ser do tipo 'string'")}
-    
-    let indexId = user.findIndex((newUser) => newUser.id == id)
-    let indexEmail = user.findIndex((newUser) => newUser.email == email)
 
-    if(indexId < 0 && id[0] == "u"){
-        const newUser: TUser = {id, email, password}
-        user.push(newUser)
-    }else{
-        res.status(400)
-        throw new Error("Esse 'id' já existe ou não começa com 'u'")
+    const idExists = await db.raw(`SELECT * FROM users WHERE id = '${id}';`)
+    const emailExists = await db.raw(`SELECT * FROM users WHERE email = '${email}';`)
+
+    if(emailExists){
+        throw new Error ("Usuário já cadastrado")
     }
 
-    if(indexEmail < 0){
-        const newUser: TUser = {id, email, password}
-        user.push(newUser)
-    }else{
-        res.status(400)
-        throw new Error("Esse 'email' já existe ou não é válido")
-    }
-    
+    const newEntry = await db.raw(`INSERT INTO users (id, email, password) VALUES ('${id}', '${email}', '${password}');`)
     res.status(201).send("Novo usuário cadastrado!")
 
    } catch (error) {
     console.log(error)
-
     res.send(error.message)
-
-    
    }
 });
 
 //CREATE A NEW PRODUCT
-app.post("/products", (req: Request, res: Response) => {
+app.post("/products", async (req: Request, res: Response) => {
    try {
     const id: string = req.body.id
     const name: string = req.body.name
     const price: number = req.body.price
-    const category: CATEGORY = req.body.category
+    const description: string = req.body.description
+    const imageUrl: string = req.body.imageUrl
 
     if(typeof id !== "string"){
         res.status(400)
@@ -181,19 +172,16 @@ app.post("/products", (req: Request, res: Response) => {
         throw new Error("'name' deve ser do tipo 'string'")
     }if(typeof price !== "number"){
         res.status(400)
-        throw new Error("'price' deve ser do tipo 'number'")}
-
-    let indexId = product.findIndex((newUser) => newUser.id == id)
-
-    if(indexId < 0 && id[0] == "p" ){
-        const newProduct: TProduct = {id, name, price, category}
-        product.push(newProduct)
-    }else{
+        throw new Error("'price' deve ser do tipo 'number'")
+    }if(typeof imageUrl !== "string"){
         res.status(400)
-        throw new Error("Já existe produto com esse 'id' ou o 'id' do produto não começa com 'p'.")
-    }
+        throw new Error("'imageUrl' deve ser do tipo 'string'")}
 
-    res.status(201).send("Novo produto cadastrado!")
+        const newEntry = await db.raw(`INSERT INTO products (id, name, price, description, imageUrl) VALUES ('${id}', '${name}', '${price}', '${description}', '${imageUrl}');`)
+        if(newEntry){
+
+            res.status(201).send("Novo produto cadastrado!")
+        }
     
    } catch (error) {
     console.log(error)
@@ -204,49 +192,17 @@ app.post("/products", (req: Request, res: Response) => {
 });
 
 //CREATE A NEW PURCHASES
-app.post("/purchases", (req: Request, res: Response) => {
+app.post("/purchases", async (req: Request, res: Response) => {
   try {
 
-    const userId: string = req.body.userId
-    const productId: string = req.body.productId
-    const quantity: number = req.body.quantity
-    const totalPrice: number = req.body.totalPrice
+    const id: string = req.body.userId
+    const buyer_Id: string = req.body.productId
+    const total_price: number = req.body.quantity
+    const createdAt = Date
+    const paid: number = req.body.paid
 
-    if(typeof userId !== "string"){
-        res.status(400)
-        throw new Error("'userId' deve ser do tipo 'string'")
-    }
-    if(typeof productId !== "string"){
-        res.status(400)
-        throw new Error("'productId' deve ser do tipo 'string'")
-    }if(typeof quantity !== "number"){
-        res.status(400)
-        throw new Error("'quantity' deve ser do tipo 'number'")
-    }if(typeof totalPrice !== "number"){
-        res.status(400)
-        throw new Error("'totalPrice' deve ser do tipo 'number'")
-    }
 
-    let indexUserId = user.findIndex((item) => item.id == userId)
-    let indexProductId = product.findIndex((item) => item.id == productId)
-
-    if(indexUserId < 0){
-        res.status(400)
-        throw new Error("Usuário não cadastrado.")
-    }if(indexProductId < 0){
-        res.status(400)
-        throw new Error("Produto não cadastrado.")}
-
-    const result:TProduct = product.find((item) => item.id === productId)
-    let checkCalculation = quantity*result.price
-
-    if(totalPrice !== checkCalculation ){
-        res.status(400)
-        throw new Error("O valor do total da compra não está correto.")}
-
-    const newPurchase: TPurchase = {userId, productId, quantity, totalPrice}
-
-    purchase.push(newPurchase)
+    const newEntry = await db.raw(`INSERT INTO purchases (id, buyer_Id, total_price, paid) VALUES ('${id}', '${buyer_Id}', '${total_price}', '${paid}');`)
     
     res.status(201).send("Nova compra realizada!")
 

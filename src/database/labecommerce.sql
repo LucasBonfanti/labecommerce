@@ -2,25 +2,31 @@
 CREATE TABLE users(
     id TEXT PRIMARY KEY NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    createdAd DATETIME
 );
 
+DROP TABLE users;
 
-INSERT INTO users (id, email, password)
+
+INSERT INTO users
 VALUES
-("u001", "lucas@email.com", "senha2022"),
-("u002", "joao@email.com", "2023senha"),
-("u003", "joana@email.com", "senha123");
+("u001", "lucas@email.com", "senha2022", DATETIME('now')),
+("u002", "joao@email.com", "2023senha", DATETIME('now')),
+("u003", "joana@email.com", "senha123", DATETIME('now'));
 
 
 CREATE TABLE products(
     id TEXT PRIMARY KEY NOT NULL UNIQUE,
     name TEXT NOT NULL,
     price REAL NOT NULL,
-    category TEXT NOT NULL
+    description TEXT NOT NULL,
+    imageUrl TEXT
 );
 
-INSERT INTO products (id, name, price, category)
+DROP TABLE products;
+
+INSERT INTO products (id, name, price, description)
 VALUES
 ("p001", "Notebook Acer", 2500.50, "informatica"),
 ("p002", "Celular Samsung S23+", 3000.00, "celulares"),
@@ -65,19 +71,19 @@ ORDER BY price ASC;
 
 CREATE TABLE purchases (
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
-    total_price REAL NOT NULL,
-    paid INTEGER NOT NULL,
-    delivered_at TEXT,
     buyer_id TEXT NOT NULL,
-    FOREIGN KEY(buyer_id) REFERENCES users(id)
+    total_price REAL NOT NULL,
+    createdAt TEXT,
+    paid INTEGER NOT NULL
+    
 );
 
 INSERT INTO purchases
 VALUES
-("001", 45.00, 0, DATETIME('now'), "u001"),
-("002", 57.00, 0, DATETIME('now') , "u003"),
-("003", 68.00, 0, DATETIME('now') , "u003"),
-("004", 99.00, 0, DATETIME('now'), "u002");
+("001", "u001", 250.00, DATETIME('now'), 0),
+("002", "u003", 1999.99, DATETIME('now'), 0),
+("003", "u003", 90.00, DATETIME('now'), 0),
+("004", "u002", 99.99, DATETIME('now'), 0);
 
 DROP TABLE purchases;
 
