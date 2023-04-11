@@ -72,13 +72,13 @@ app.get("/product/search", async (req: Request, res: Response) => {
 });
 
 //GET PRODUCTS BY ID
-app.get("/product/:id", (req: Request, res: Response) => {
+app.get("/product/:id", async (req: Request, res: Response) => {
     try {
         const id: string = req.params.id
 
-        const result:TProduct = product.find((item) => item.id === id)
+        const result = await db.raw(`SELECT * FROM products WHERE id = '${id}';`)
 
-        if(!result){
+        if(result.length <= 0){
             res.status(400)
             throw new Error("O produto não existe.")
         }
@@ -93,15 +93,15 @@ app.get("/product/:id", (req: Request, res: Response) => {
 })
 
 //GET PURCHASES BY USER 
-app.get("/users/:id/purchases", (req: Request, res: Response) => {
+app.get("/users/:id/purchases", async (req: Request, res: Response) => {
     try {
         const id: string = req.params.id
 
-        const result:TPurchase = purchase.find((item) => item.userId === id)
+        const result: {}[] = await db.raw(`SELECT * FROM purchases WHERE buyer_id = '${id}';`)
 
-        if(!result){
+        if(result.length <= 0){
             res.status(400)
-            throw new Error("Esse usuário não existe.")
+            throw new Error("Esse usuário não possui nenhuma compra.")
         }
 
         res.status(200).send(result)
