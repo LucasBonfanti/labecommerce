@@ -7,14 +7,16 @@ export enum CATEGORY {
 export type TUser = {
     id: string,
     email: string,
-    password: string
+    password: string,
+    createdAd: string
 }
 
 export type TProduct = {
     id: string,
     name: string,
     price: number,
-    category: CATEGORY
+    description: string,
+    imageUrl: string
 }
 
 export type TPurchase = {
