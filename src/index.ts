@@ -105,6 +105,32 @@ app.get("/users/:id/purchases", async (req: Request, res: Response) => {
 
 })
 
+//GET PURCHASE BY ID
+app.get("/purchases/:idPur", async (req:Request, res: Response) => {
+    try {
+        const idPur: string = req.params.idPur
+
+        const result: {}[] = await db("purchases").select("*").where({idPur: idPur}).innerJoin(
+            "users",
+            "purchases.buyer_id", 
+            "=", 
+            "users.id"
+            )
+
+        if(result.length === 0){
+            res.status(400)
+            throw new Error("Nenhuma compra localizada.")
+        }
+
+
+        res.status(200).send(result)
+
+    } catch (error: any) {
+        res.status(400).send(error.message)
+        
+    }
+})
+
 
 
 //CREATE A NEW USER

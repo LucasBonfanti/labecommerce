@@ -70,7 +70,7 @@ WHERE price >= 100.00 AND price <= 300.00
 ORDER BY price ASC;
 
 CREATE TABLE purchases (
-    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    idPur TEXT PRIMARY KEY UNIQUE NOT NULL,
     buyer_id TEXT NOT NULL,
     total_price REAL NOT NULL,
     createdAt TEXT,
