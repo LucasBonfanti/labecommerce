@@ -110,12 +110,7 @@ app.get("/purchases/:idPur", async (req:Request, res: Response) => {
     try {
         const idPur: string = req.params.idPur
 
-        const result: {}[] = await db("purchases").select("*").where({idPur: idPur}).innerJoin(
-            "users",
-            "purchases.buyer_id", 
-            "=", 
-            "users.id"
-            )
+        const result: {}[] = await db("purchases").select("*").innerJoin("users","purchases.buyer_id","users.id").where({idPur: idPur})
 
         if(result.length === 0){
             res.status(400)

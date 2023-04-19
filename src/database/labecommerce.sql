@@ -1,6 +1,7 @@
 -- Active: 1680028472652@@127.0.0.1@3306
 CREATE TABLE users(
     id TEXT PRIMARY KEY NOT NULL UNIQUE,
+    name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     createdAd DATETIME
@@ -11,9 +12,9 @@ DROP TABLE users;
 
 INSERT INTO users
 VALUES
-("u001", "lucas@email.com", "senha2022", DATETIME('now')),
-("u002", "joao@email.com", "2023senha", DATETIME('now')),
-("u003", "joana@email.com", "senha123", DATETIME('now'));
+("u001", "Lucas", "lucas@email.com", "senha2022", DATETIME('now')),
+("u002","João", "joao@email.com", "2023senha", DATETIME('now')),
+("u003","Joana", "joana@email.com", "senha123", DATETIME('now'));
 
 
 CREATE TABLE products(
@@ -80,10 +81,10 @@ CREATE TABLE purchases (
 
 INSERT INTO purchases
 VALUES
-("001", "u001", 250.00, DATETIME('now'), 0),
-("002", "u003", 1999.99, DATETIME('now'), 0),
-("003", "u003", 90.00, DATETIME('now'), 0),
-("004", "u002", 99.99, DATETIME('now'), 0);
+("pur001", "u001", 250.00, DATETIME('now'), 0),
+("pur002", "u003", 1999.99, DATETIME('now'), 0),
+("pur003", "u003", 90.00, DATETIME('now'), 0),
+("pur004", "u002", 99.99, DATETIME('now'), 0);
 
 DROP TABLE purchases;
 
